@@ -3,7 +3,7 @@ import { Trip } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { useTrip } from '@/context/TripContext';
-import { Calendar, Clock, MapPin, Users, DollarSign, Paw, Cigarette } from 'lucide-react';
+import { Calendar, Clock, MapPin, Users, DollarSign, Dog, Cigarette } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface TripCardProps {
@@ -72,7 +72,7 @@ const TripCard = ({ trip, showActions = true }: TripCardProps) => {
           
           <div className="flex space-x-4">
             <div className="flex items-center text-gray-600">
-              <Paw className={`h-5 w-5 mr-1 ${trip.allowPets ? 'text-trajetly-500' : 'text-gray-400'}`} />
+              <Dog className={`h-5 w-5 mr-1 ${trip.allowPets ? 'text-trajetly-500' : 'text-gray-400'}`} />
               <span className={trip.allowPets ? 'text-gray-600' : 'text-gray-400'}>
                 {trip.allowPets ? 'Animaux acceptés' : 'Pas d\'animaux'}
               </span>

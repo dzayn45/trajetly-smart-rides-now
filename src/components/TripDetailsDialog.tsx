@@ -17,10 +17,12 @@ import {
   User, 
   Dog, 
   Cigarette,
-  Shield
+  Shield,
+  Star
 } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface TripDetailsDialogProps {
   trip: Trip;
@@ -29,11 +31,15 @@ interface TripDetailsDialogProps {
 }
 
 const TripDetailsDialog = ({ trip, isOpen, onClose }: TripDetailsDialogProps) => {
-  const { vehicles } = useTrip();
+  const { vehicles, users } = useTrip();
   const [imageError, setImageError] = useState(false);
   
   // Find the vehicle associated with this trip
   const vehicle = trip.vehicleId ? vehicles.find(v => v.id === trip.vehicleId) : undefined;
+  
+  // Find the driver for this trip
+  const driver = users.find(u => u.id === trip.driverId);
+  const driverRating = driver?.rating || 4.5; // Default to 4.5 if no rating
   
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { 
@@ -53,6 +59,35 @@ const TripDetailsDialog = ({ trip, isOpen, onClose }: TripDetailsDialogProps) =>
     return `https://source.unsplash.com/featured/?car,${vehicle?.brand},${vehicle?.model}`;
   };
 
+  // Generate stars for rating
+  const renderStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<Star key={`star-${i}`} className="h-4 w-4 fill-amber-400 text-amber-400" />);
+    }
+    
+    if (hasHalfStar) {
+      stars.push(
+        <div key="half-star" className="relative">
+          <Star className="h-4 w-4 text-amber-400" />
+          <div className="absolute top-0 left-0 w-1/2 overflow-hidden">
+            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+          </div>
+        </div>
+      );
+    }
+    
+    const emptyStars = 5 - stars.length;
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(<Star key={`empty-star-${i}`} className="h-4 w-4 text-gray-300" />);
+    }
+
+    return stars;
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -68,6 +103,32 @@ const TripDetailsDialog = ({ trip, isOpen, onClose }: TripDetailsDialogProps) =>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
           {/* Left column - Trip info */}
           <div className="space-y-5">
+            {/* Driver information with photo and rating */}
+            {driver && (
+              <div className="bg-trajetly-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-3">Conducteur</h3>
+                <div className="flex items-center">
+                  <Avatar className="h-14 w-14 border-2 border-trajetly-100">
+                    <AvatarImage 
+                      src={`https://source.unsplash.com/featured/?portrait,person,${driver.id}`} 
+                      alt={driver.name} 
+                    />
+                    <AvatarFallback className="bg-trajetly-100 text-trajetly-600 text-xl">
+                      {driver.name.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="ml-4">
+                    <p className="font-medium text-lg text-gray-800">{driver.name}</p>
+                    <div className="flex items-center">
+                      {renderStars(driverRating)}
+                      <span className="text-sm text-gray-600 ml-1">({driverRating.toFixed(1)})</span>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">Membre depuis {new Date(driver.memberSince || '2022-01-01').getFullYear()}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="bg-trajetly-50 p-4 rounded-lg">
               <h3 className="font-semibold text-lg mb-3">Détails du trajet</h3>
               
@@ -154,9 +215,34 @@ const TripDetailsDialog = ({ trip, isOpen, onClose }: TripDetailsDialogProps) =>
                     <p className="text-gray-700">
                       <span className="font-medium">Immatriculation:</span> {vehicle.licensePlate}
                     </p>
+                    <p className="text-gray-700">
+                      <span className="font-medium">Année:</span> {vehicle.year || '2020'}
+                    </p>
+                    <p className="text-gray-700">
+                      <span className="font-medium">Couleur:</span> {vehicle.color || 'Blanc'}
+                    </p>
                   </div>
                 </div>
               )}
+            </div>
+            
+            {/* Car gallery - additional photos */}
+            <div className="bg-white p-4 rounded-lg shadow-sm border">
+              <h3 className="font-semibold text-lg mb-3">Galerie du véhicule</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {[1, 2, 3, 4].map((num) => (
+                  <img 
+                    key={`car-img-${num}`}
+                    src={`https://source.unsplash.com/featured/?car,interior,${vehicle?.brand || 'auto'},${num}`}
+                    alt={`Photo ${num} du véhicule`}
+                    className="rounded-md h-24 w-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://placehold.co/600x400/9b87f5/ffffff?text=Photo';
+                    }}
+                  />
+                ))}
+              </div>
             </div>
             
             <div className="bg-trajetly-50 p-4 rounded-lg">

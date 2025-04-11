@@ -1,8 +1,7 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { useTrip } from '@/context/TripContext'; 
+import { useTrip } from '@/context/TripContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import RoleSelector from '@/components/RoleSelector';
@@ -10,19 +9,16 @@ import TripSearch from '@/components/TripSearch';
 import TripCard from '@/components/TripCard';
 import { UserRole } from '@/types';
 import { Car, Search, Shield, Ticket } from 'lucide-react';
-import { 
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-
 const Index = () => {
-  const { isAuthenticated, userRole } = useAuth();
-  const { trips } = useTrip();
+  const {
+    isAuthenticated,
+    userRole
+  } = useAuth();
+  const {
+    trips
+  } = useTrip();
   const navigate = useNavigate();
   const [showRoleSelector, setShowRoleSelector] = useState(false);
 
@@ -41,13 +37,10 @@ const Index = () => {
       navigate('/admin/dashboard');
     }
   };
-
   const handleGetStarted = () => {
     setShowRoleSelector(true);
   };
-
-  return (
-    <div className="flex flex-col min-h-screen">
+  return <div className="flex flex-col min-h-screen">
       <Header />
       
       <main className="flex-grow">
@@ -62,52 +55,26 @@ const Index = () => {
                 Que vous soyez conducteur ou passager, Trajetly vous connecte au trajet dont vous avez besoin — rapide, sûr et adapté à vos préférences.
               </p>
               
-              {!isAuthenticated && (
-                showRoleSelector ? (
-                  <div>
+              {!isAuthenticated && (showRoleSelector ? <div>
                     <h2 className="text-2xl font-semibold mb-6">Choisissez votre rôle</h2>
                     <RoleSelector onRoleSelect={handleRoleSelect} />
-                  </div>
-                ) : (
-                  <button
-                    className="bg-white text-trajetly-600 font-semibold px-8 py-3 rounded-md shadow-lg hover:bg-gray-100 transition"
-                    onClick={handleGetStarted}
-                  >
+                  </div> : <button className="bg-white text-trajetly-600 font-semibold px-8 py-3 rounded-md shadow-lg hover:bg-gray-100 transition" onClick={handleGetStarted}>
                     Commencer maintenant
-                  </button>
-                )
-              )}
+                  </button>)}
               
-              {isAuthenticated && (
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Button 
-                    onClick={() => navigate(`/${userRole}/dashboard`)}
-                    className="bg-white text-trajetly-600 hover:bg-gray-100"
-                  >
+              {isAuthenticated && <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Button onClick={() => navigate(`/${userRole}/dashboard`)} className="bg-white text-trajetly-600 hover:bg-gray-100">
                     Aller à mon tableau de bord
                   </Button>
                   
-                  {userRole === 'passenger' && (
-                    <Button 
-                      onClick={() => navigate('/search')}
-                      variant="outline"
-                      className="border-white text-white hover:bg-white/10"
-                    >
+                  {userRole === 'passenger' && <Button onClick={() => navigate('/search')} variant="outline" className="border-white text-white hover:bg-white/10">
                       Rechercher un trajet
-                    </Button>
-                  )}
+                    </Button>}
                   
-                  {userRole === 'driver' && (
-                    <Button 
-                      onClick={() => navigate('/create-trip')}
-                      variant="outline"
-                      className="border-white text-white hover:bg-white/10"
-                    >
+                  {userRole === 'driver' && <Button onClick={() => navigate('/create-trip')} variant="outline" className="border-white text-white bg-[#13ab9c]">
                       Créer un trajet
-                    </Button>
-                  )}
-                </div>
-              )}
+                    </Button>}
+                </div>}
             </div>
           </div>
         </section>
@@ -125,24 +92,14 @@ const Index = () => {
               </p>
             </div>
             
-            {featuredTrips.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {featuredTrips.map(trip => (
-                  <TripCard key={trip.id} trip={trip} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center">
+            {featuredTrips.length > 0 ? <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {featuredTrips.map(trip => <TripCard key={trip.id} trip={trip} />)}
+              </div> : <div className="text-center">
                 <p className="text-gray-600">Aucun trajet disponible pour le moment.</p>
-              </div>
-            )}
+              </div>}
             
             <div className="text-center mt-8">
-              <Button 
-                variant="outline" 
-                className="mt-4"
-                onClick={() => navigate('/search')}
-              >
+              <Button variant="outline" className="mt-4" onClick={() => navigate('/search')}>
                 Voir tous les trajets disponibles
               </Button>
             </div>
@@ -247,8 +204,6 @@ const Index = () => {
       </main>
       
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Index;

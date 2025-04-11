@@ -30,29 +30,27 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                
-                {/* Driver Routes */}
-                <Route path="/driver/dashboard" element={<DriverDashboard />} />
-                <Route path="/driver/vehicles" element={<VehiclesPage />} />
-                <Route path="/create-trip" element={<CreateTripPage />} />
-                
-                {/* Passenger Routes */}
-                <Route path="/passenger/dashboard" element={<PassengerDashboard />} />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/passenger/reservations" element={<ReservationsPage />} />
-                
-                {/* Admin Routes */}
-                <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                
-                {/* Catch-all */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </div>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              
+              {/* Driver Routes */}
+              <Route path="/driver/dashboard" element={<DriverDashboard />} />
+              <Route path="/driver/vehicles" element={<VehiclesPage />} />
+              <Route path="/create-trip" element={<CreateTripPage />} />
+              
+              {/* Passenger Routes */}
+              <Route path="/passenger/dashboard" element={<PassengerDashboard />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/passenger/reservations" element={<ReservationsPage />} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              
+              {/* Catch-all */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </BrowserRouter>
         </TooltipProvider>
       </TripProvider>

@@ -6,7 +6,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   userRole: UserRole;
-  login: (user: User) => void;
+  login: (role: UserRole) => void;
   logout: () => void;
   setUserRole: (role: UserRole) => void;
 }

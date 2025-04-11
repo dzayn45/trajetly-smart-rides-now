@@ -6,7 +6,7 @@ interface TripContextType {
   trips: Trip[];
   vehicles: Vehicle[];
   reservations: Reservation[];
-  addTrip: (trip: Trip) => void;
+  addTrip: (trip: Omit<Trip, 'id'>) => void;
   addVehicle: (vehicle: Vehicle) => void;
   getDriverTrips: (driverId: string) => Trip[];
   getPassengerReservations: (passengerId: string) => Reservation[];
@@ -97,7 +97,7 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
   const [vehicles, setVehicles] = useState<Vehicle[]>(mockVehicles);
   const [reservations, setReservations] = useState<Reservation[]>(mockReservations);
 
-  const addTrip = (trip: Trip) => {
+  const addTrip = (trip: Omit<Trip, 'id'>) => {
     setTrips([...trips, { ...trip, id: `t${trips.length + 1}` }]);
   };
 

@@ -18,6 +18,7 @@ import ReservationsPage from "./pages/passenger/Reservations";
 import AdminDashboard from "./pages/admin/Dashboard";
 import CreateTripPage from "./pages/CreateTrip";
 import Auth from "./pages/Auth";
+import ProfilePage from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<ProfilePage />} />
               
               {/* Driver Routes */}
               <Route path="/driver/dashboard" element={<DriverDashboard />} />

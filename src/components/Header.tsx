@@ -152,6 +152,11 @@ const Header = () => {
                   </>
                 )}
                 
+                <Link to="/profile" className="text-gray-700 py-2 border-b flex items-center">
+                  <User className="h-5 w-5 mr-2" />
+                  Mon profil
+                </Link>
+                
                 <Button 
                   variant="ghost" 
                   onClick={logout} 

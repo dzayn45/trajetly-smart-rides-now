@@ -19,6 +19,8 @@ const mockUsers = {
     email: 'jean@trajetly.com',
     role: 'driver' as UserRole,
     avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+    rating: 4.8,
+    memberSince: '2022-05-15',
   },
   passenger: {
     id: 'p1',
@@ -26,6 +28,8 @@ const mockUsers = {
     email: 'marie@trajetly.com',
     role: 'passenger' as UserRole,
     avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+    rating: 4.3,
+    memberSince: '2023-03-21',
   },
   admin: {
     id: 'a1',
@@ -33,6 +37,7 @@ const mockUsers = {
     email: 'admin@trajetly.com',
     role: 'admin' as UserRole,
     avatar: 'https://randomuser.me/api/portraits/men/68.jpg',
+    memberSince: '2021-01-10',
   },
 };
 

@@ -1,6 +1,7 @@
 
 import { Trip, Vehicle } from '@/types';
 import { useTrip } from '@/context/TripContext';
+import { useAuth } from '@/context/AuthContext';
 import { 
   Dialog,
   DialogContent,
@@ -22,7 +23,10 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useNavigate } from 'react-router-dom';
 
 interface TripDetailsDialogProps {
   trip: Trip;
@@ -31,8 +35,11 @@ interface TripDetailsDialogProps {
 }
 
 const TripDetailsDialog = ({ trip, isOpen, onClose }: TripDetailsDialogProps) => {
-  const { vehicles, users } = useTrip();
+  const { vehicles, users, makeReservation } = useTrip();
+  const { user, isAuthenticated } = useAuth();
   const [imageError, setImageError] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
   
   // Find the vehicle associated with this trip
   const vehicle = trip.vehicleId ? vehicles.find(v => v.id === trip.vehicleId) : undefined;
@@ -86,6 +93,35 @@ const TripDetailsDialog = ({ trip, isOpen, onClose }: TripDetailsDialogProps) =>
     }
 
     return stars;
+  };
+
+  const handleBooking = () => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Connexion requise",
+        description: "Veuillez vous connecter pour réserver ce trajet",
+        variant: "destructive",
+      });
+      onClose();
+      navigate('/auth');
+      return;
+    }
+    
+    if (!user) return;
+    
+    makeReservation({
+      tripId: trip.id,
+      passengerId: user.id,
+      status: 'pending',
+      seatsReserved: 1,
+    });
+
+    toast({
+      title: "Réservation effectuée",
+      description: "Votre demande de réservation a été envoyée au conducteur",
+    });
+    
+    onClose();
   };
 
   return (
@@ -226,25 +262,6 @@ const TripDetailsDialog = ({ trip, isOpen, onClose }: TripDetailsDialogProps) =>
               )}
             </div>
             
-            {/* Car gallery - additional photos */}
-            <div className="bg-white p-4 rounded-lg shadow-sm border">
-              <h3 className="font-semibold text-lg mb-3">Galerie du véhicule</h3>
-              <div className="grid grid-cols-2 gap-2">
-                {[1, 2, 3, 4].map((num) => (
-                  <img 
-                    key={`car-img-${num}`}
-                    src={`https://source.unsplash.com/featured/?car,interior,${vehicle?.brand || 'auto'},${num}`}
-                    alt={`Photo ${num} du véhicule`}
-                    className="rounded-md h-24 w-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://placehold.co/600x400/9b87f5/ffffff?text=Photo';
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-            
             <div className="bg-trajetly-50 p-4 rounded-lg">
               <h3 className="font-semibold text-lg flex items-center gap-2 mb-3">
                 <Shield className="h-5 w-5 text-trajetly-600" />
@@ -262,6 +279,16 @@ const TripDetailsDialog = ({ trip, isOpen, onClose }: TripDetailsDialogProps) =>
                   • Support client disponible 24/7
                 </p>
               </div>
+            </div>
+            
+            <div className="mt-auto">
+              <Button 
+                onClick={handleBooking} 
+                className="w-full py-6 text-lg"
+                disabled={trip.availableSeats < 1}
+              >
+                {trip.availableSeats < 1 ? 'Complet' : `Réserver - ${trip.price} €`}
+              </Button>
             </div>
           </div>
         </div>

@@ -1,3 +1,4 @@
+
 import { Trip } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
@@ -7,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
 import TripDetailsDialog from './TripDetailsDialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useNavigate } from 'react-router-dom';
 
 interface TripCardProps {
   trip: Trip;
@@ -14,10 +16,11 @@ interface TripCardProps {
 }
 
 const TripCard = ({ trip, showActions = true }: TripCardProps) => {
-  const { userRole, user } = useAuth();
+  const { userRole, user, isAuthenticated } = useAuth();
   const { makeReservation, users } = useTrip();
   const { toast } = useToast();
   const [showDetails, setShowDetails] = useState(false);
+  const navigate = useNavigate();
 
   // Find the driver for this trip
   const driver = users.find(u => u.id === trip.driverId);
@@ -29,12 +32,17 @@ const TripCard = ({ trip, showActions = true }: TripCardProps) => {
   };
 
   const handleReservation = () => {
-    if (!user) {
+    if (!isAuthenticated) {
       toast({
-        title: "Erreur",
-        description: "Vous devez être connecté pour réserver un trajet",
+        title: "Connexion requise",
+        description: "Veuillez vous connecter pour réserver ce trajet",
         variant: "destructive",
       });
+      navigate('/auth');
+      return;
+    }
+
+    if (!user) {
       return;
     }
 
@@ -161,7 +169,7 @@ const TripCard = ({ trip, showActions = true }: TripCardProps) => {
                 Voir détails
               </Button>
               
-              {userRole === 'passenger' && trip.availableSeats > 0 && (
+              {trip.availableSeats > 0 && (
                 <Button onClick={handleReservation}>
                   Réserver
                 </Button>

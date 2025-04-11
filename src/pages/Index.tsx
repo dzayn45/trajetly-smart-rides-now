@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -105,34 +104,7 @@ const Index = () => {
               {featuredTrips.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   {featuredTrips.map(trip => (
-                    <Card key={trip.id} className="h-full flex flex-col">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="flex justify-between items-center">
-                          <span>{trip.departureCity} → {trip.arrivalCity}</span>
-                          <span className="text-trajetly-600 font-bold">{trip.price} €</span>
-                        </CardTitle>
-                        <CardDescription>
-                          Le {new Date(trip.departureDate).toLocaleDateString('fr-FR', { 
-                            weekday: 'long', 
-                            day: 'numeric', 
-                            month: 'long' 
-                          })} à {trip.departureTime}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="flex-grow">
-                        <div className="text-sm text-gray-600 mb-2">
-                          <span className="font-medium">{trip.availableSeats}</span> place{trip.availableSeats > 1 ? 's' : ''} disponible{trip.availableSeats > 1 ? 's' : ''}
-                        </div>
-                        {trip.description && (
-                          <p className="text-gray-700 text-sm mt-2">{trip.description}</p>
-                        )}
-                      </CardContent>
-                      <CardFooter className="pt-2 flex justify-end">
-                        <Button onClick={() => navigate('/search')}>
-                          Voir détails
-                        </Button>
-                      </CardFooter>
-                    </Card>
+                    <TripCard key={trip.id} trip={trip} />
                   ))}
                 </div>
               ) : (

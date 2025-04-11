@@ -1,4 +1,3 @@
-
 import { Trip } from '@/types';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
@@ -52,7 +51,6 @@ const TripCard = ({ trip, showActions = true }: TripCardProps) => {
     });
   };
 
-  // Generate stars for rating
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);

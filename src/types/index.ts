@@ -7,6 +7,8 @@ export interface User {
   email: string;
   role: UserRole;
   avatar?: string;
+  rating?: number;
+  memberSince?: string;
 }
 
 export interface Vehicle {
@@ -15,6 +17,8 @@ export interface Vehicle {
   model: string;
   licensePlate: string;
   ownerId: string;
+  year?: string;
+  color?: string;
 }
 
 export interface Trip {

@@ -1,11 +1,11 @@
-
 import React, { createContext, useContext, useState } from 'react';
-import { Trip, Vehicle, Reservation, SearchFilters } from '@/types';
+import { Trip, Vehicle, Reservation, SearchFilters, User } from '@/types';
 
 interface TripContextType {
   trips: Trip[];
   vehicles: Vehicle[];
   reservations: Reservation[];
+  users: User[];
   addTrip: (trip: Omit<Trip, 'id'>) => void;
   addVehicle: (vehicle: Vehicle) => void;
   getDriverTrips: (driverId: string) => Trip[];
@@ -90,12 +90,39 @@ const mockReservations: Reservation[] = [
   },
 ];
 
+const mockUsers: User[] = [
+  {
+    id: 'd1',
+    name: 'Jean Dupont',
+    email: 'jean@example.com',
+    role: 'driver',
+    rating: 4.8,
+    memberSince: '2022-05-15',
+  },
+  {
+    id: 'd2',
+    name: 'Marie Martin',
+    email: 'marie@example.com',
+    role: 'driver',
+    rating: 4.2,
+    memberSince: '2021-08-10',
+  },
+  {
+    id: 'p1',
+    name: 'Lucas Bernard',
+    email: 'lucas@example.com',
+    role: 'passenger',
+    memberSince: '2023-01-20',
+  },
+];
+
 const TripContext = createContext<TripContextType | undefined>(undefined);
 
 export const TripProvider = ({ children }: { children: React.ReactNode }) => {
   const [trips, setTrips] = useState<Trip[]>(mockTrips);
   const [vehicles, setVehicles] = useState<Vehicle[]>(mockVehicles);
   const [reservations, setReservations] = useState<Reservation[]>(mockReservations);
+  const [users] = useState<User[]>(mockUsers);
 
   const addTrip = (trip: Omit<Trip, 'id'>) => {
     setTrips([...trips, { ...trip, id: `t${trips.length + 1}` }]);
@@ -145,7 +172,6 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
     };
     setReservations([...reservations, newReservation]);
     
-    // Update available seats for the trip
     setTrips(
       trips.map(trip => {
         if (trip.id === reservation.tripId) {
@@ -163,7 +189,6 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
     const reservation = reservations.find(r => r.id === reservationId);
     if (!reservation) return;
 
-    // Update reservation status
     setReservations(
       reservations.map(r => {
         if (r.id === reservationId) {
@@ -173,7 +198,6 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
       })
     );
 
-    // Restore available seats for the trip
     setTrips(
       trips.map(trip => {
         if (trip.id === reservation.tripId) {
@@ -197,6 +221,7 @@ export const TripProvider = ({ children }: { children: React.ReactNode }) => {
         trips,
         vehicles,
         reservations,
+        users,
         addTrip,
         addVehicle,
         getDriverTrips,

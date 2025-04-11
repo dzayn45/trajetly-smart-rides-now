@@ -16,6 +16,7 @@ const Header = () => {
   return (
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Logo - always links to home page */}
         <Link to="/" className="flex items-center space-x-2">
           <Car className="h-8 w-8 text-trajetly-500" />
           <span className="text-2xl font-bold text-trajetly-600">Trajetly</span>
@@ -118,6 +119,11 @@ const Header = () => {
                   )}
                   <span className="text-gray-700">{user?.name}</span>
                 </div>
+                
+                {/* Add home page link for mobile menu when user is logged in */}
+                <Link to="/" className="text-gray-700 py-2 border-b">
+                  Accueil
+                </Link>
                 
                 {userRole === 'driver' && (
                   <>

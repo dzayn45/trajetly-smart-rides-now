@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -8,9 +9,10 @@ import RoleSelector from '@/components/RoleSelector';
 import TripSearch from '@/components/TripSearch';
 import TripCard from '@/components/TripCard';
 import { UserRole } from '@/types';
-import { Car, Search, Shield, Ticket } from 'lucide-react';
+import { Car, Search, Shield, Ticket, ArrowRight, CheckCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+
 const Index = () => {
   const {
     isAuthenticated,
@@ -37,44 +39,122 @@ const Index = () => {
       navigate('/admin/dashboard');
     }
   };
+  
   const handleGetStarted = () => {
     setShowRoleSelector(true);
   };
+  
   return <div className="flex flex-col min-h-screen">
       <Header />
       
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="hero-gradient text-white">
-          <div className="container mx-auto px-4 py-16 md:py-24">
+        <section className="relative overflow-hidden bg-gradient-to-br from-trajetly-700 via-trajetly-600 to-trajetly-500 text-white">
+          {/* Background pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <defs>
+                <pattern id="grid" width="8" height="8" patternUnits="userSpaceOnUse">
+                  <path d="M 8 0 L 0 0 0 8" fill="none" stroke="white" strokeWidth="0.5" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+          </div>
+          
+          {/* Curved shape */}
+          <div className="absolute bottom-0 left-0 right-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full h-24 sm:h-32 md:h-40">
+              <path 
+                fill="#ffffff" 
+                fillOpacity="1" 
+                d="M0,224L48,208C96,192,192,160,288,154.7C384,149,480,171,576,186.7C672,203,768,213,864,202.7C960,192,1056,160,1152,144C1248,128,1344,128,1392,128L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+              </path>
+            </svg>
+          </div>
+          
+          <div className="container mx-auto px-4 pt-20 pb-32 md:pt-32 md:pb-40 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Trajetly – Covoiturage Intelligent, À Votre Façon
+              <div className="inline-flex items-center justify-center mb-6 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
+                <span className="text-sm font-medium">Trajetly — Le covoiturage facile</span>
+              </div>
+              
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in">
+                Covoiturage Intelligent,
+                <span className="relative inline-block ml-3">
+                  <span className="relative z-10">À Votre Façon</span>
+                  <span className="absolute bottom-1 left-0 w-full h-3 bg-trajetly-400/40 rounded-sm -z-0"></span>
+                </span>
               </h1>
-              <p className="text-xl md:text-2xl mb-8">
+              
+              <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-2xl mx-auto leading-relaxed">
                 Que vous soyez conducteur ou passager, Trajetly vous connecte au trajet dont vous avez besoin — rapide, sûr et adapté à vos préférences.
               </p>
               
-              {!isAuthenticated && (showRoleSelector ? <div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+                {!isAuthenticated && (showRoleSelector ? (
+                  <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 w-full max-w-md">
                     <h2 className="text-2xl font-semibold mb-6">Choisissez votre rôle</h2>
                     <RoleSelector onRoleSelect={handleRoleSelect} />
-                  </div> : <button className="bg-white text-trajetly-600 font-semibold px-8 py-3 rounded-md shadow-lg hover:bg-gray-100 transition" onClick={handleGetStarted}>
+                  </div>
+                ) : (
+                  <Button 
+                    onClick={handleGetStarted}
+                    className="bg-white text-trajetly-600 hover:bg-gray-100 font-semibold px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg group"
+                  >
                     Commencer maintenant
-                  </button>)}
-              
-              {isAuthenticated && <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Button onClick={() => navigate(`/${userRole}/dashboard`)} className="bg-white text-trajetly-600 hover:bg-gray-100">
-                    Aller à mon tableau de bord
+                    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
-                  
-                  {userRole === 'passenger' && <Button onClick={() => navigate('/search')} variant="outline" className="border-white text-white hover:bg-white/10">
-                      Rechercher un trajet
-                    </Button>}
-                  
-                  {userRole === 'driver' && <Button onClick={() => navigate('/create-trip')} variant="outline" className="border-white text-white bg-[#13ab9c]">
-                      Créer un trajet
-                    </Button>}
-                </div>}
+                ))}
+                
+                {isAuthenticated && (
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Button 
+                      onClick={() => navigate(`/${userRole}/dashboard`)} 
+                      className="bg-white text-trajetly-600 hover:bg-gray-100 font-semibold px-8 py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg"
+                    >
+                      Aller à mon tableau de bord
+                    </Button>
+                    
+                    {userRole === 'passenger' && (
+                      <Button 
+                        onClick={() => navigate('/search')} 
+                        variant="outline" 
+                        className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 rounded-xl text-lg"
+                      >
+                        Rechercher un trajet
+                      </Button>
+                    )}
+                    
+                    {userRole === 'driver' && (
+                      <Button 
+                        onClick={() => navigate('/create-trip')} 
+                        variant="outline" 
+                        className="border-2 border-white text-white hover:bg-white/10 px-8 py-6 rounded-xl text-lg"
+                      >
+                        Créer un trajet
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+              
+              {/* Benefits */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-16">
+                {[
+                  { icon: <Car className="h-5 w-5" />, text: "Trajets sur mesure" },
+                  { icon: <CheckCircle className="h-5 w-5" />, text: "Simple et sécurisé" },
+                  { icon: <Shield className="h-5 w-5" />, text: "Économique et écologique" }
+                ].map((item, i) => (
+                  <div 
+                    key={i} 
+                    className="flex items-center justify-center space-x-2 text-white/90 px-4 py-2 rounded-lg bg-white/5 backdrop-blur-sm"
+                  >
+                    {item.icon}
+                    <span>{item.text}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -92,11 +172,15 @@ const Index = () => {
               </p>
             </div>
             
-            {featuredTrips.length > 0 ? <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {featuredTrips.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {featuredTrips.map(trip => <TripCard key={trip.id} trip={trip} />)}
-              </div> : <div className="text-center">
+              </div>
+            ) : (
+              <div className="text-center">
                 <p className="text-gray-600">Aucun trajet disponible pour le moment.</p>
-              </div>}
+              </div>
+            )}
             
             <div className="text-center mt-8">
               <Button variant="outline" className="mt-4" onClick={() => navigate('/search')}>
@@ -112,7 +196,7 @@ const Index = () => {
             <h2 className="text-3xl font-bold text-center mb-12">Comment ça marche</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-white p-8 rounded-lg shadow-md text-center">
+              <div className="bg-white p-8 rounded-lg shadow-md text-center transform transition-transform hover:translate-y-[-5px] duration-300">
                 <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-trajetly-100 text-trajetly-600 mb-6">
                   <Car className="h-8 w-8" />
                 </div>
@@ -137,7 +221,7 @@ const Index = () => {
                 </ul>
               </div>
               
-              <div className="bg-white p-8 rounded-lg shadow-md text-center">
+              <div className="bg-white p-8 rounded-lg shadow-md text-center transform transition-transform hover:translate-y-[-5px] duration-300">
                 <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-trajetly-100 text-trajetly-600 mb-6">
                   <Search className="h-8 w-8" />
                 </div>
@@ -162,7 +246,7 @@ const Index = () => {
                 </ul>
               </div>
               
-              <div className="bg-white p-8 rounded-lg shadow-md text-center">
+              <div className="bg-white p-8 rounded-lg shadow-md text-center transform transition-transform hover:translate-y-[-5px] duration-300">
                 <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-trajetly-100 text-trajetly-600 mb-6">
                   <Shield className="h-8 w-8" />
                 </div>

@@ -1,9 +1,8 @@
-
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { MenuIcon, XIcon, Car, User, UserCog, LogOut } from 'lucide-react';
+import { MenuIcon, XIcon, Hotel, User, UserCog, LogOut } from 'lucide-react';
 
 const Header = () => {
   const { isAuthenticated, userRole, user, logout } = useAuth();
@@ -17,9 +16,9 @@ const Header = () => {
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo - always links to home page */}
-        <Link to="/" className="flex items-center space-x-2">
-          <Car className="h-8 w-8 text-trajetly-500" />
-          <span className="text-2xl font-bold text-trajetly-600">Trajetly</span>
+        <Link to="/" className="flex items-center space-x-3">
+          <Hotel className="h-10 w-10 text-primary-500" />
+          <span className="text-2xl font-bold text-primary-600">Trajetly</span>
         </Link>
 
         {/* Desktop Menu */}

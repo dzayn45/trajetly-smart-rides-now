@@ -18,7 +18,7 @@ const Header = () => {
         {/* Logo - always links to home page */}
         <Link to="/" className="flex items-center space-x-3">
           <Hotel className="h-10 w-10 text-primary-500" />
-          <span className="text-2xl font-bold text-primary-600">Trajetly</span>
+          <span className="text-2xl font-bold text-primary-600">SkyView Hotel</span>
         </Link>
 
         {/* Desktop Menu */}

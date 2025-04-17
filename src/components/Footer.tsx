@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Bed, Mail, Phone, MapPin, Facebook, Twitter, Instagram } from 'lucide-react';
 
@@ -6,12 +5,14 @@ const Footer = () => {
   return (
     <footer className="bg-gray-100 mt-auto">
       <div className="container mx-auto px-4 py-8">
+        {/* First column - top left */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <Bed className="h-6 w-6 text-blue-500" />
               <span className="text-xl font-bold text-blue-600">SkyView Hotel</span>
             </div>
+            
             <p className="text-gray-600 mb-4">
               Luxury accommodations with stunning views and exceptional service. Experience the perfect stay at SkyView Hotel.
             </p>
@@ -27,7 +28,7 @@ const Footer = () => {
               </a>
             </div>
           </div>
-          
+
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-800">Quick Links</h3>
             <ul className="space-y-2">
